@@ -1,0 +1,40 @@
+# Run with: uv run pre-commit install  (then hooks fire on every commit)
+# Or check everything now: uv run pre-commit run --all-files
+#
+# ruff, black, and mypy run through uv against the project environment rather than
+# pre-commit-managed venvs. This keeps them in lockstep with `uv run <tool>` and the
+# versions pinned in uv.lock, so there is no second set of tool versions to bump and
+# no risk of a hook enforcing a rule the project's own tooling no longer applies.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff (lint + autofix, via uv)
+        entry: uv run ruff check --fix
+        language: system
+        types_or: [python, pyi]
+
+      - id: black
+        name: black (via uv)
+        entry: uv run black
+        language: system
+        types: [python]
+
+      - id: mypy
+        name: mypy (strict, via uv)
+        entry: uv run mypy
+        language: system
+        types: [python]
+        files: ^src/
+        pass_filenames: false
+        args: [src]

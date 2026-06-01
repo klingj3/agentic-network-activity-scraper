@@ -1,7 +1,7 @@
 [project]
 name = "agentic-network-scraper"
 version = "0.1.0"
-description = "Network-layer extractor: captures browser network traffic and uses a PydanticAI agent + pydantic-graph to declaratively extract structured data via JMESPath or jq."
+description = "Network-layer extractor: captures browser network traffic and uses a PydanticAI agent to declaratively extract structured data via JMESPath."
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "John Klingelhofer", email = "jkklingelhofer@gmail.com" }]
@@ -9,16 +9,20 @@ requires-python = ">=3.12"
 dependencies = [
     "pydantic>=2.7",
     "pydantic-ai>=0.0.54",
-    "pydantic-graph>=0.0.54",
     "jmespath>=1.0.1",
-    "jq>=1.8.0",
+    "httpx>=0.27",
     "anthropic>=0.30",
     "playwright>=1.44",
+    "rich>=13.0",
+    "pillow>=12.2.0",
+    "blinker>=1.8",
+    "python-dotenv>=1.0",
 ]
 
 [project.optional-dependencies]
 dev = [
     "mypy>=1.10",
+    "types-jmespath>=1.0",
     "pytest>=8.0",
     "pytest-cov>=5.0",
     "pytest-asyncio>=0.23",
@@ -32,13 +36,15 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/agnetic_network_scraper"]
+sources = ["src"]
+include = ["src/**/*.py", "src/**/py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
-addopts = "--cov=src --cov-report=term-missing"
+addopts = "--cov=src --cov-report=term-missing -m 'not integration'"
 asyncio_mode = "auto"
+markers = ["integration: live test hitting the network and Anthropic API (run with -m integration)"]
 
 [tool.coverage.run]
 source = ["src"]
@@ -48,14 +54,27 @@ branch = true
 show_missing = true
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.12"
 strict = true
 warn_return_any = true
 warn_unused_configs = true
 mypy_path = "src"
 
+[tool.black]
+line-length = 120
+
 [tool.ruff]
 src = ["src"]
+line-length = 120
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "ANN"]
+# ANN401: `Any` is the honest type for arbitrary parsed JSON bodies and the generic
+# decorator/executor plumbing, so allow it rather than paper over it with casts.
+ignore = ["ANN401"]
+
+[tool.ruff.lint.per-file-ignores]
+# Test functions and example scripts are exempt from annotation rules (ANN); the library
+# code under src/ is fully typed and checked by mypy --strict. Real-bug lints (E/F) still apply.
+"tests/**" = ["ANN"]
+"scripts/**" = ["ANN"]

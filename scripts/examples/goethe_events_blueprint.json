@@ -1,0 +1,154 @@
+{
+  "target_url": "https://www.goethe.de/ins/us/en/ver.cfm",
+  "goal": "Get all upcoming events. For each event extract: title, start date, city, event type or category, and registration/detail URL.",
+  "endpoints": {
+    "events": {
+      "method": "GET",
+      "url": "https://www.goethe.de/rest/objeventcalendarRedesign/events/fetchEvents?configData=%7B%22category_ID%22%3A%22178926_178927_178937_178936_178935_178934_178933_178932_178931_178930_178929_178928_178938%22%2C%22elementsperpage%22%3A20%2C%22frontendfilter%22%3A%22adress_IDtxt%2Ccategory_IDtxt%2Cdate_range%22%2C%22headline%22%3A%22Calendar%22%2C%22outputtype%22%3A%22standardkalender%22%2C%22weekend_day_start%22%3A5%2C%22institute_ID%22%3A%22222_395_396_397_398_399_400_444%22%2C%22week_day_start%22%3A0%2C%22timezone%22%3A6%7D&langId=166&viewMode=-1&filterData=%7B%22start%22%3A0%2C%22excluded_objectIds%22%3A%5B27265994%2C27275843%2C27278139%2C27248778%2C27204020%2C22789087%2C27206010%2C27204183%2C27205995%5D%7D",
+      "url_template": "https://www.goethe.de/rest/objeventcalendarRedesign/events/fetchEvents?configData=%7B%22category_ID%22%3A%22178926_178927_178937_178936_178935_178934_178933_178932_178931_178930_178929_178928_178938%22%2C%22elementsperpage%22%3A20%2C%22frontendfilter%22%3A%22adress_IDtxt%2Ccategory_IDtxt%2Cdate_range%22%2C%22headline%22%3A%22Calendar%22%2C%22outputtype%22%3A%22standardkalender%22%2C%22weekend_day_start%22%3A5%2C%22institute_ID%22%3A%22222_395_396_397_398_399_400_444%22%2C%22week_day_start%22%3A0%2C%22timezone%22%3A6%7D&langId=%7Bn%7D&viewMode=-1&filterData=%7B%22start%22%3A0%2C%22excluded_objectIds%22%3A%5B27265994%2C27275843%2C27278139%2C27248778%2C27204020%2C22789087%2C27206010%2C27204183%2C27205995%5D%7D"
+    }
+  },
+  "expression": "events.eventItems[*].{title: headline, date: date_start_ical, city: event_city, event_type: event_type, registration_url: registration_link_url}",
+  "target_schema": {
+    "$defs": {
+      "Event": {
+        "properties": {
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "date": {
+            "title": "Date",
+            "type": "string"
+          },
+          "city": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "City"
+          },
+          "event_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Event Type"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          }
+        },
+        "required": [
+          "title",
+          "date"
+        ],
+        "title": "Event",
+        "type": "object"
+      }
+    },
+    "items": {
+      "$ref": "#/$defs/Event"
+    },
+    "title": "EventList",
+    "type": "array"
+  },
+  "sample_output": [
+    {
+      "title": "German Films at North American Festivals",
+      "date": "2026-01-02",
+      "city": "",
+      "event_type": "Film festivals",
+      "url": null
+    },
+    {
+      "title": "Breaking Lines",
+      "date": "2026-03-06",
+      "city": "",
+      "event_type": "Streaming",
+      "url": null
+    },
+    {
+      "title": "Voices of the World Cup",
+      "date": "2026-05-29",
+      "city": "",
+      "event_type": "Competition",
+      "url": null
+    },
+    {
+      "title": "Mozart's The Magic Flute",
+      "date": "2026-05-30",
+      "city": "Los Angeles, CA",
+      "event_type": "Opera",
+      "url": null
+    },
+    {
+      "title": "Family Story Time",
+      "date": "2026-06-02",
+      "city": "Washington, DC",
+      "event_type": "Story Time",
+      "url": null
+    }
+  ],
+  "description": "Extracts all upcoming events from the Goethe Institut event calendar API. Each record contains: the event title (headline), ISO start date (date_start_ical), city (event_city), event type/category (event_type), and the registration or detail URL (registration_link_url). The endpoint returns up to 20 events per page ordered by start date ascending.",
+  "url_template": "https://www.goethe.de/rest/objeventcalendarRedesign/events/fetchEvents?configData={configData}&langId={langId}&viewMode={viewMode}&filterData={filterData}",
+  "variable_specs": [
+    {
+      "name": "configData",
+      "location": "query",
+      "description": "JSON-encoded configuration object specifying category IDs, institute IDs, elements per page, output type, and timezone. Controls which event catalogue is queried.",
+      "example_values": [
+        "{\"category_ID\":\"178926_178927_178937_178936_178935_178934_178933_178932_178931_178930_178929_178928_178938\",\"elementsperpage\":20,\"frontendfilter\":\"adress_IDtxt,category_IDtxt,date_range\",\"headline\":\"Calendar\",\"outputtype\":\"standardkalender\",\"weekend_day_start\":5,\"institute_ID\":\"222_395_396_397_398_399_400_444\",\"week_day_start\":0,\"timezone\":6}"
+      ],
+      "required": true
+    },
+    {
+      "name": "langId",
+      "location": "query",
+      "description": "Language identifier for localizing the response content (e.g. category labels, month names).",
+      "example_values": [
+        "{n}",
+        "en",
+        "de"
+      ],
+      "required": true
+    },
+    {
+      "name": "viewMode",
+      "location": "query",
+      "description": "Controls the calendar view mode. -1 = list view.",
+      "example_values": [
+        "-1"
+      ],
+      "required": false
+    },
+    {
+      "name": "filterData",
+      "location": "query",
+      "description": "JSON-encoded filter/pagination object. 'start' controls the pagination offset (0-based); 'excluded_objectIds' lists event object IDs to suppress.",
+      "example_values": [
+        "{\"start\":0,\"excluded_objectIds\":[]}"
+      ],
+      "required": false
+    }
+  ]
+}
