@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel
 
-from agent.extraction import validate_extraction
+from agentic_network_scraper.agent.extraction import validate_extraction
 
 
 class Event(BaseModel):

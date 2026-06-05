@@ -10,12 +10,12 @@ from pydantic import BaseModel
 from pydantic_ai import Agent, BinaryContent, RunContext
 from pydantic_ai.usage import UsageLimits
 
-from browser.engine import CaptureEngine
-from browser.events import JsonNetworkEvent
-from browser.session import BrowserSession
-from browser.types import ResponseDigest, ResponseSample
-from common import log
-from common.urls import merge_query
+from agentic_network_scraper.browser.engine import CaptureEngine
+from agentic_network_scraper.browser.events import JsonNetworkEvent
+from agentic_network_scraper.browser.session import BrowserSession
+from agentic_network_scraper.browser.types import ResponseDigest, ResponseSample
+from agentic_network_scraper.common import log
+from agentic_network_scraper.common.urls import merge_query
 
 from .constants import ModelTier, get_model
 from .extraction import validate_extraction

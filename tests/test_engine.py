@@ -1,8 +1,8 @@
 """Unit tests for the capture engine's body classification, URL masking, and dedup."""
 
-from browser.engine import CaptureEngine, _mask_url, _sample, _shape, detect
-from browser.events import JsonNetworkEvent
-from browser.types import BodyKind
+from agentic_network_scraper.browser.engine import CaptureEngine, _mask_url, _sample, _shape, detect
+from agentic_network_scraper.browser.events import JsonNetworkEvent
+from agentic_network_scraper.browser.types import BodyKind
 
 
 def test_detect_json():

@@ -1,6 +1,6 @@
 """Unit tests for the shared URL helpers, including the same-origin probe guard."""
 
-from common.urls import merge_query
+from agentic_network_scraper.common.urls import merge_query
 
 
 def test_merge_query_adds_and_overrides_params():

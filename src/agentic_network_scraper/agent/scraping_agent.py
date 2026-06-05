@@ -9,9 +9,9 @@ from pydantic_ai import Agent
 from pydantic_ai.exceptions import UsageLimitExceeded
 from pydantic_ai.usage import UsageLimits
 
-from browser.engine import CaptureEngine
-from browser.session import BrowserSession
-from common import log
+from agentic_network_scraper.browser.engine import CaptureEngine
+from agentic_network_scraper.browser.session import BrowserSession
+from agentic_network_scraper.common import log
 
 from .constants import ModelTier, get_model
 from .extraction import validate_extraction
