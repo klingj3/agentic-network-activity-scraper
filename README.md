@@ -81,8 +81,7 @@ A checked-in copy of that artifact lives at [`scripts/examples/goethe_events_blu
 ```python
 import asyncio
 from pydantic import BaseModel, RootModel
-from agent.scraping_agent import run_extraction
-from agent.types import ExtractionBlueprint, NoResource
+from agentic_network_scraper import run_extraction, ExtractionBlueprint, NoResource
 
 class Product(BaseModel):
     name: str
@@ -114,7 +113,7 @@ no model calls, no browser. `run_blueprint` re-fetches the endpoints and applies
 returning a typed instance of the same shape you extracted with:
 
 ```python
-from blueprints import run_blueprint
+from agentic_network_scraper import run_blueprint
 
 # `blueprint` is the ExtractionBlueprint from above, or its JSON reloaded from disk / a database.
 products = run_blueprint(blueprint, ProductList)
@@ -127,31 +126,32 @@ page_2 = run_blueprint(blueprint, ProductList, variables={"page": "2"})
 
 `run_blueprint` re-checks the target type against the schema the blueprint was verified with, so a drifted
 model fails loudly instead of silently dropping fields. For untyped access (raw JMESPath output) or to share
-a single `httpx.Client`, drop down to `BlueprintRunner` in `agent/runner.py`.
+a single `httpx.Client`, drop down to `BlueprintRunner` in `agentic_network_scraper/agent/runner.py`.
 
 ## Project layout
 
 ```
 src/
-  agent/
-    scraping_agent.py    — agent definition and run_extraction() entry point
-    tools.py             — all agent tools + AgentDeps + vision helper
-    types.py             — shared Pydantic models (ExtractionBlueprint, NoResource, …) and agent signals
-    extraction.py        — JMESPath extraction runner + target-schema validation
-    runner.py            — BlueprintRunner: re-fetch a saved blueprint's endpoints and re-extract (untyped)
-    constants.py         — model tier config (Sonnet for the extraction loop, Opus for vision)
-  blueprints/
-    execute.py           — run_blueprint(): typed, schema-checked front door over BlueprintRunner
-  browser/
-    session.py           — Playwright session: network recording, lazy-load scrolling, interactable annotation
-    engine.py            — CaptureEngine: deduplication, parsing, shape inference
-    annotate.py          — discover visible interactables and paint them onto screenshots for the vision pass
-    overlay.py           — in-page status panel that mirrors the console log onto the live browser
-    events.py            — JsonNetworkEvent dataclass
-    types.py             — Pydantic models for the capture layer
-  common/
-    log.py               — rich console logger + log signal, shared by both layers (depends on neither)
-    urls.py              — query-string merge helper shared by capture and blueprint replay
+  agentic_network_scraper/
+    agent/
+      scraping_agent.py    — agent definition and run_extraction() entry point
+      tools.py             — all agent tools + AgentDeps + vision helper
+      types.py             — shared Pydantic models (ExtractionBlueprint, NoResource, …) and agent signals
+      extraction.py        — JMESPath extraction runner + target-schema validation
+      runner.py            — BlueprintRunner: re-fetch a saved blueprint's endpoints and re-extract (untyped)
+      constants.py         — model tier config (Sonnet for the extraction loop, Opus for vision)
+    blueprints/
+      execute.py           — run_blueprint(): typed, schema-checked front door over BlueprintRunner
+    browser/
+      session.py           — Playwright session: network recording, lazy-load scrolling, interactable annotation
+      engine.py            — CaptureEngine: deduplication, parsing, shape inference
+      annotate.py          — discover visible interactables and paint them onto screenshots for the vision pass
+      overlay.py           — in-page status panel that mirrors the console log onto the live browser
+      events.py            — JsonNetworkEvent dataclass
+      types.py             — Pydantic models for the capture layer
+    common/
+      log.py               — rich console logger + log signal, shared by both layers (depends on neither)
+      urls.py              — query-string merge helper shared by capture and blueprint replay
 scripts/
   examples/
     basic_run.py         — Goethe Institut events: extract a blueprint, then replay it with run_blueprint

@@ -4,7 +4,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
-from browser.types import CapturedRequest
+from agentic_network_scraper.browser.types import CapturedRequest
 
 
 class VariableSpec(BaseModel):

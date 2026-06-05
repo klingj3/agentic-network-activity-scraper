@@ -10,8 +10,8 @@ import pytest
 from dotenv import load_dotenv
 from pydantic import BaseModel
 
-from agent.scraping_agent import run_extraction
-from agent.types import ExtractionBlueprint
+from agentic_network_scraper.agent.scraping_agent import run_extraction
+from agentic_network_scraper.agent.types import ExtractionBlueprint
 
 load_dotenv()
 

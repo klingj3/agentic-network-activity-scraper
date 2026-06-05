@@ -12,9 +12,9 @@ from typing import Any, cast
 import httpx
 from pydantic import BaseModel
 
-from browser.engine import detect
-from browser.types import BodyKind
-from common.urls import merge_query
+from agentic_network_scraper.browser.engine import detect
+from agentic_network_scraper.browser.types import BodyKind
+from agentic_network_scraper.common.urls import merge_query
 
 from .extraction import run_extract, validate_extraction
 from .types import ExtractionBlueprint

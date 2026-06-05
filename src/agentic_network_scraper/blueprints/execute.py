@@ -15,8 +15,8 @@ from typing import TypeVar
 import httpx
 from pydantic import BaseModel
 
-from agent.runner import BlueprintRunner
-from agent.types import ExtractionBlueprint
+from agentic_network_scraper.agent.runner import BlueprintRunner
+from agentic_network_scraper.agent.types import ExtractionBlueprint
 
 T = TypeVar("T", bound=BaseModel)
 

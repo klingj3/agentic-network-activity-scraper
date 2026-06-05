@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, RootModel
 from rich.console import Console
 
-from agent.scraping_agent import run_extraction
-from agent.types import NoResource
-from blueprints import run_blueprint
+from agentic_network_scraper.agent.scraping_agent import run_extraction
+from agentic_network_scraper.agent.types import NoResource
+from agentic_network_scraper.blueprints import run_blueprint
 
 # Load ANTHROPIC_API_KEY (and any other settings) from a local .env, as documented in the README.
 load_dotenv()

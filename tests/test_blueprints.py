@@ -4,9 +4,9 @@ import httpx
 import pytest
 from pydantic import BaseModel, RootModel
 
-from agent.types import ExtractionBlueprint
-from blueprints import BlueprintTypeMismatch, run_blueprint
-from browser.types import CapturedRequest
+from agentic_network_scraper.agent.types import ExtractionBlueprint
+from agentic_network_scraper.blueprints import BlueprintTypeMismatch, run_blueprint
+from agentic_network_scraper.browser.types import CapturedRequest
 
 
 class Event(BaseModel):

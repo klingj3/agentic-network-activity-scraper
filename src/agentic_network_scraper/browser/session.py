@@ -12,7 +12,7 @@ from typing import Any
 from playwright.sync_api import Page, Response, sync_playwright
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
-from common.log import LogEvent, log_signal
+from agentic_network_scraper.common.log import LogEvent, log_signal
 
 from .annotate import InteractableElement, annotate, discover_interactables
 from .events import JsonNetworkEvent
